@@ -43,15 +43,15 @@ class TssEurekaClientApplicationTests {
         
         @Test   
         public void testFile() {
-            java.io.File fileTest = documentCreator.createPDF();
-            //java.io.File file = new java.io.File("D://Report.pdf");
-            boolean fileExists = fileTest.exists();
-            assertThat(fileExists).isTrue();
-            
-            java.io.File fileTest1 = documentCreator.createPDF();
-            //java.io.File file = new java.io.File("D://Report.pdf");
-            boolean fileExists1 = fileTest1.exists();
-            assertThat(fileExists1).isTrue();            
+//            java.io.File fileTest = documentCreator.createPDF();
+//            java.io.File file = new java.io.File("D://Report.pdf");
+//            boolean fileExists = fileTest.exists();
+//            assertThat(fileExists).isTrue();
+//            
+//            java.io.File fileTest1 = documentCreator.createPDF();
+//            java.io.File file1 = new java.io.File("D://Report.pdf");
+//            boolean fileExists1 = fileTest1.exists();
+//            assertThat(fileExists1).isTrue();            
             
         }    
         

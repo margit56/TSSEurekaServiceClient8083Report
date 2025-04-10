@@ -1,0 +1,1 @@
+"D:\Program Files\jdk-17\bin\java"  -jar -Dspring.profiles.active=port8761 TSSEurekaServerProfile-0.0.1-SNAPSHOT.jar
