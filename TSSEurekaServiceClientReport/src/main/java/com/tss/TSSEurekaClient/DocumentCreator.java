@@ -25,6 +25,9 @@ import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  *
  * @author mariusz
@@ -43,10 +46,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Component
 public class DocumentCreator {
     
+    private static final Logger log = LoggerFactory.getLogger(DocumentCreator.class);
+    
     @Autowired
     ProductService productService;
 
-    public File createPDF()
+    public File createPDF(String filename)
     {
         Document document = new Document();
         LocalDateTime now = LocalDateTime.now();  
@@ -59,19 +64,29 @@ public class DocumentCreator {
 //        PdfWriter.getInstance(document, outputStream);
         
         //Operacja tworzenia wydruku z użyciem pliku na dysku
-         
-        File filePDF = new File("D://Report_"+dtfFile.format(now)+".pdf");
+        log.info("Tworzenie nazwy pliku",System.currentTimeMillis());    
+        File filePDF;
+        if (!filename.isEmpty())
+        {
+            filePDF = new File(filename);
+            log.info("Tworzenie pliku Report.pdf",System.currentTimeMillis());  
+        }    
+        else
+        {
+            filePDF = new File("D://Report_"+dtfFile.format(now)+".pdf");
+            log.info("Tworzenie pliku Report + czas.pdf",System.currentTimeMillis());
+        }
         FileOutputStream fileOutputStream = new FileOutputStream(filePDF);
         PdfWriter writer = PdfWriter.getInstance(document, fileOutputStream);
         
 
-
+        log.info("Otwarcie dokumentu ",System.currentTimeMillis());
         document.open();
         Font fontSmall = FontFactory.getFont(FontFactory.COURIER, 12, Color.BLACK);
         Font fontMedium = FontFactory.getFont(FontFactory.COURIER, 16, Color.BLACK);
         Font fontBig = FontFactory.getFont(FontFactory.COURIER, 24, Color.BLACK);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
-        
+        log.info("Ustalenie właściwości fontów ",System.currentTimeMillis());
         //Image image = Image.getInstance("https://kesizo.github.io/assets/images/kesizo-logo-6-832x834.png");
         Image image = Image.getInstance(getClass().getClassLoader().getResource("image.png"));
         image.scaleAbsolute(50f,50f);
@@ -81,20 +96,22 @@ public class DocumentCreator {
 //        image.scaleAbsolute(PageSize.A4.getWidth(),PageSize.A4.getHeight());
 //        image.setAbsolutePosition(0, 0);
 //        canvas.addImage(image);
-
+        log.info("Dodanie obrazu z zasobów aplikacji ",System.currentTimeMillis());
         document.add(image);
         document.add(new Paragraph("Lista produktów",fontBig));
 
         
         document.add(new Paragraph("               ", fontBig));  
-        
+        log.info("Dodanie tabeli ",System.currentTimeMillis());
         PdfPTable table = new PdfPTable(5);
         
         addTableHeader(table);
+        log.info("Pobranie danych do tabeli z usługi ",System.currentTimeMillis());
         addRows(table);
         
         document.add(table);
         
+        log.info("Dodanie informacji w stopce wydruku ",System.currentTimeMillis());
         document.add(new Paragraph("                 ", fontBig));        
         document.add(new Paragraph("Czas wydruku: "+dtf.format(now), fontSmall));
 
@@ -102,11 +119,13 @@ public class DocumentCreator {
                 
 
         document.close();
+        log.info("Zamknięcie dokumentu ",System.currentTimeMillis());
         
         return filePDF;
         }
         catch(Exception ex)
         {
+          log.info(ex.toString(),System.currentTimeMillis());
           return null;           
         }
     }

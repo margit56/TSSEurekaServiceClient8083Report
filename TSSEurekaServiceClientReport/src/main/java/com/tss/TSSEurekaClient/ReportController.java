@@ -45,7 +45,7 @@ public ResponseEntity<InputStreamResource> downloadPDFFile()
         throws IOException {
     
     log.info("Tworzenie pdf",System.currentTimeMillis());
-    File file = documentCreator.createPDF();
+    File file = documentCreator.createPDF("");
 
     //ClassPathResource pdfFile = new ClassPathResource(file.getAbsolutePath());
     FileSystemResource pdfFile = new FileSystemResource(file.getAbsolutePath());    
