@@ -1,66 +1,71 @@
-version: '1.0.0'
 services:
-
  eureka1:
-  build:
-  dockerfile: ./TSSEurekaServerProfile/Dockerfile
+  build: ./TSSEurekaServerProfile
   container_name: eureka1
+  hostname: eureka1
   environment: 
    # Important for clients to register with eureka
    - eureka.client.serviceUrl.defaultZone=http://eureka2:8761/eureka/  
   networks:
-   - tssNet
+   - tssnet
   ports:
    - "8761:8761"
    
  eureka2:
-  build:
-  dockerfile: ./TSSEurekaServerProfile/Dockerfile
+  build: ./TSSEurekaServerProfile
   container_name: eureka2
+  hostname: eureka2
   environment: 
    # Important for clients to register with eureka
    - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/
   networks:
-   - tssNet
+   - tssnet
   ports:
-   - "8761:8761"   
+   - "8762:8761"   
 
  client1:
-  build: ./client/
-  dockerfile: ./TSSEurekaServiceClientProfile/Dockerfile
+  build: ./TSSEurekaServiceClientProfile
   container_name: client1
   environment: 
    # Important for clients to register with eureka
    - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/,http://eureka2:8761/eureka/
+   - eureka.client.instance.preferIpAddress = true
+   - spring.application.name = eurekaServiceClientProfile   
   networks:
-   - tssNet
+   - tssnet
   ports:
-   - "8080:8080"
+   - "8081:8080"
  
  client2:
-  build: ./client/
-  dockerfile: ./TSSEurekaServiceClientProfile/Dockerfile
+  build: ./TSSEurekaServiceClientProfile
   container_name: client2
   environment: 
    # Important for clients to register with eureka
    - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/,http://eureka2:8761/eureka/  
+   - eureka.client.instance.preferIpAddress = true
+   - spring.application.name = eurekaServiceClientProfile   
   networks:
-   - tssNet
+   - tssnet
   ports:
-   - "8080:8080"   
-   
- clientReport:
-  build: ./clientReport/
-  dockerfile: ./TSSEurekaServiceClientReport/Dockerfile
-  container_name: clientReport
+   - "8082:8080"  
+
+ clientreport:
+  build: ./TSSEurekaServiceClientReport
+  container_name: clientreport
   environment: 
    # Important for clients to register with eureka
    - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/,http://eureka2:8761/eureka/  
+   - eureka.client.instance.preferIpAddress = true
+   - spring.application.name = eurekaServiceClient8083Report
   networks:
-   - tssNet
+   - tssnet
   ports:
-   - "8080:8080"   
+   - "8083:8080"  
+
 
 networks:
- tssNet:
+  tssnet:
     driver: bridge
+    
+    
+
