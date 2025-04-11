@@ -1,0 +1,66 @@
+version: '1.0.0'
+services:
+
+ eureka1:
+  build:
+  dockerfile: ./TSSEurekaServerProfile/Dockerfile
+  container_name: eureka1
+  environment: 
+   # Important for clients to register with eureka
+   - eureka.client.serviceUrl.defaultZone=http://eureka2:8761/eureka/  
+  networks:
+   - tssNet
+  ports:
+   - "8761:8761"
+   
+ eureka2:
+  build:
+  dockerfile: ./TSSEurekaServerProfile/Dockerfile
+  container_name: eureka2
+  environment: 
+   # Important for clients to register with eureka
+   - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/
+  networks:
+   - tssNet
+  ports:
+   - "8761:8761"   
+
+ client1:
+  build: ./client/
+  dockerfile: ./TSSEurekaServiceClientProfile/Dockerfile
+  container_name: client1
+  environment: 
+   # Important for clients to register with eureka
+   - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/,http://eureka2:8761/eureka/
+  networks:
+   - tssNet
+  ports:
+   - "8080:8080"
+ 
+ client2:
+  build: ./client/
+  dockerfile: ./TSSEurekaServiceClientProfile/Dockerfile
+  container_name: client2
+  environment: 
+   # Important for clients to register with eureka
+   - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/,http://eureka2:8761/eureka/  
+  networks:
+   - tssNet
+  ports:
+   - "8080:8080"   
+   
+ clientReport:
+  build: ./clientReport/
+  dockerfile: ./TSSEurekaServiceClientReport/Dockerfile
+  container_name: clientReport
+  environment: 
+   # Important for clients to register with eureka
+   - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/,http://eureka2:8761/eureka/  
+  networks:
+   - tssNet
+  ports:
+   - "8080:8080"   
+
+networks:
+ tssNet:
+    driver: bridge
