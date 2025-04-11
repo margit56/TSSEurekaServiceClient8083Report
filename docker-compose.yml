@@ -26,11 +26,10 @@ services:
  client1:
   build: ./TSSEurekaServiceClientProfile
   container_name: client1
+  hostname: client1
   environment: 
    # Important for clients to register with eureka
    - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/,http://eureka2:8761/eureka/
-   - eureka.client.instance.preferIpAddress = true
-   - spring.application.name = eurekaServiceClientProfile   
   networks:
    - tssnet
   ports:
@@ -39,11 +38,10 @@ services:
  client2:
   build: ./TSSEurekaServiceClientProfile
   container_name: client2
+  hostname: client2
   environment: 
    # Important for clients to register with eureka
    - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/,http://eureka2:8761/eureka/  
-   - eureka.client.instance.preferIpAddress = true
-   - spring.application.name = eurekaServiceClientProfile   
   networks:
    - tssnet
   ports:
@@ -52,15 +50,14 @@ services:
  clientreport:
   build: ./TSSEurekaServiceClientReport
   container_name: clientreport
+  hostname: clientreport
   environment: 
    # Important for clients to register with eureka
    - eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka/,http://eureka2:8761/eureka/  
-   - eureka.client.instance.preferIpAddress = true
-   - spring.application.name = eurekaServiceClient8083Report
   networks:
    - tssnet
   ports:
-   - "8083:8080"  
+   - "8083:8083"  
 
 
 networks:
