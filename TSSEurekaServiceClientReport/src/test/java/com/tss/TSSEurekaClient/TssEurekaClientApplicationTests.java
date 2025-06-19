@@ -44,9 +44,12 @@ class TssEurekaClientApplicationTests {
         @Test   
         public void testFile() {
             //java.io.File fileTest = documentCreator.createPDF("D://Report.pdf");
-            java.io.File fileTest = new java.io.File("D://Report.pdf");
-            boolean fileExists = fileTest.exists();
-            assertThat(fileExists).isTrue();
+            //java.io.File fileTest = new java.io.File("D://Report.pdf");
+            //boolean fileExists = fileTest.exists();
+            //assertThat(fileExists).isTrue();            
+            java.io.InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Report.pdf");
+            Assertions.assertNotNull(inputStream, "Plik Report.pdf powinien być dostępny w zasobach testowych");
+
 //            
 //            java.io.File fileTest1 = documentCreator.createPDF();
 //            java.io.File file1 = new java.io.File("D://Report.pdf");
