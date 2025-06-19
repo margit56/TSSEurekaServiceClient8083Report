@@ -62,16 +62,19 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
-        shell: pwsh
-        script: |
-            Write-Output "Aktualny katalog:"
-            Get-Location
-            Write-Output "Lista plików:"
-            Get-ChildItem
-            Write-Output "Czy istnieje katalog docelowy?"
-            if (Test-Path 'C:\Users\mar\GitHubActionsApp\tssMulti') { Write-Output 'TAK' } else { Write-Output 'NIE' }
-            Write-Output "Sprawdzenie docker-compose:"
-            docker-compose --version
-            Set-Location 'C:\Users\mar\GitHubActionsApp\tssMulti'
-            docker-compose down
-            docker-compose up --build -d
+      script: |
+        echo Aktualny katalog:
+        cd
+        echo Lista plików:
+        dir
+        echo Czy istnieje katalog docelowy?
+        if exist "C:\Users\mariusz\GitHubActionsApp\tssMulti" (
+          echo TAK
+        ) else (
+          echo NIE
+        )
+        echo Sprawdzenie docker-compose:
+        docker-compose --version
+        cd C:\Users\mariusz\GitHubActionsApp\tssMulti
+        docker-compose down
+        docker-compose up --build -d
