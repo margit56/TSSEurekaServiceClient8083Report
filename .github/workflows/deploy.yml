@@ -1,0 +1,47 @@
+name: CI/CD - Build & Deploy via SSH and Docker Compose
+
+on:
+  push:
+    branches: [ "main" ]  # lub inna gałąź, np. "develop"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Pobiera kod źródłowy z repozytorium
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2. Instalacja JDK i budowa aplikacji Maven + testy
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Build with Maven
+      run: mvn clean install --no-transfer-progress
+
+    # 3. Wysyłanie projektu na zdalny serwer
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.SSH_HOST }}              # np. 192.168.18.10
+        username: ${{ secrets.SSH_USER }}          # np. mar
+        key: ${{ secrets.SSH_KEY }}                # klucz prywatny (PEM), bez hasła
+        script: |
+          echo ">>> Usuwam starą aplikację i kopiuję nową wersję..."
+          rm -rf ~/app
+          mkdir -p ~/app
+
+          # Przesyłamy repo przez SCP (lokalnie kopiowane z GitHub Runnera)
+          scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/app
+
+          echo ">>> Uruchamiam aplikację za pomocą docker-compose..."
+          cd ~/app
+          docker-compose down         # zatrzymuje poprzednią wersję (jeśli była)
+          docker-compose up --build -d  # buduje i uruchamia kontenery w tle
+
+          echo ">>> Usuwam nieużywane obrazy Dockera..."
+          docker image prune -f       # czyści stare, nieużywane obrazy
