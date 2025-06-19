@@ -2,7 +2,7 @@ name: CI/CD - Build & Deploy via SSH and Docker Compose
 
 on:
   push:
-    branches: [ "main" ]  # lub inna gałąź, np. "develop"
+    branches: [ "master" ]  # lub inna gałąź, np. "develop"
 
 jobs:
   build-and-deploy:
