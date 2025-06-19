@@ -53,7 +53,7 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         source: "./"
-        target: "C:/Users/mariusz/app/tssMulti"
+        target: "C:/Users/mariusz/GitHubActionsApp/tssMulti"
 
     # Restart i budowa kontenerów docker-compose na serwerze
     - name: Restart docker-compose on server
