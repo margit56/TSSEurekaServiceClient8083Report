@@ -63,19 +63,15 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          echo Aktualny katalog:
-          cd
-          echo Lista plików:
-          dir
-          echo Czy istnieje katalog docelowy?
-          if exist "C:\Users\mariusz\GitHubActionsApp\tssMulti" (
-            echo TAK
-          ) else (
-            echo NIE
-          )
-          echo Sprawdzenie docker-compose:
-          docker-compose --version
-          cd C:\Users\mariusz\GitHubActionsApp\tssMulti
-          docker-compose down
-          docker-compose up --build -d
+         powershell.exe -Command "
+         echo Aktualny katalog;
+         Get-Location;
+         echo Lista plików;
+         Get-ChildItem 'C:\Users\mariusz\GitHubActionsApp\tssMulti';
+         echo Sprawdzenie docker-compose;
+         docker-compose --version;
+         cd 'C:\Users\mariusz\GitHubActionsApp\tssMulti';
+         docker-compose down;
+         docker-compose up --build -d
+         "
 
