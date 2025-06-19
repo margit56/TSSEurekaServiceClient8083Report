@@ -56,21 +56,22 @@ jobs:
         target: "C:/Users/mariusz/GitHubActionsApp/tssMulti"
 
     # Restart i budowa kontenerów docker-compose na serwerze
-    - name: Restart docker-compose on server
+    - name: Restart docker-compose on server - Windows Docker
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
+        shell: pwsh
         script: |
-          echo "Aktualny katalog:"
-          pwd
-          echo "Lista plików:"
-          ls -la
-          echo "Czy istnieje katalog docelowy?"
-          test -d "C:/Users/mar/GitHubActionsApp/tssMulti" && echo "TAK" || echo "NIE"
-          echo "Sprawdzenie docker-compose:"
-          docker-compose --version || echo "docker-compose nie znaleziony"
-          cd C:/Users/mariusz/GitHubActionsApp/tssMulti
-          docker-compose down
-          docker-compose up --build -d
+            Write-Output "Aktualny katalog:"
+            Get-Location
+            Write-Output "Lista plików:"
+            Get-ChildItem
+            Write-Output "Czy istnieje katalog docelowy?"
+            if (Test-Path 'C:\Users\mar\GitHubActionsApp\tssMulti') { Write-Output 'TAK' } else { Write-Output 'NIE' }
+            Write-Output "Sprawdzenie docker-compose:"
+            docker-compose --version
+            Set-Location 'C:\Users\mar\GitHubActionsApp\tssMulti'
+            docker-compose down
+            docker-compose up --build -d
