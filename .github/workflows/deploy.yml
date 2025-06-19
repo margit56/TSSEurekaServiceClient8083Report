@@ -63,6 +63,6 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          cd ~/tssMulti
+          cd C:/Users/mariusz/GitHubActionsApp/tssMulti
           docker-compose down
           docker-compose up --build -d
