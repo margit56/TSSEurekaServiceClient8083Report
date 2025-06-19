@@ -46,7 +46,7 @@ jobs:
           mkdir -p ~/tssMulti
 
     # Kopiowanie całego repo na serwer
-    - name: Copy project files to server
+    - name: Copy project files to server 
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -63,15 +63,5 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-         powershell.exe -Command "
-         echo Aktualny katalog;
-         Get-Location;
-         echo Lista plików;
-         Get-ChildItem 'C:\Users\mariusz\GitHubActionsApp\tssMulti';
-         echo Sprawdzenie docker-compose;
-         docker-compose --version;
-         cd 'C:\Users\mariusz\GitHubActionsApp\tssMulti';
-         docker-compose down;
-         docker-compose up --build -d
-         "
+         cmd /c "cd C:\Users\mariusz\GitHubActionsApp\tssMulti && docker-compose down && docker-compose up --build -d"
 
