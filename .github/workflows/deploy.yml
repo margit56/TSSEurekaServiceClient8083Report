@@ -3,7 +3,7 @@ name: CI/CD - Build & Deploy multi-module project via SSH and Docker Compose
 on:
   push:
     branches: [ "master" ]  # lub Twoja główna gałąź
-
+  workflow_dispatch:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
